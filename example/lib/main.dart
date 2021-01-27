@@ -5,7 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:es_flutter_plugin/es_flutter_plugin.dart';
 import 'package:es_flutter_plugin/src/service/card_service.dart';
 void main() {
-  runApp(MyApp());
+  runApp(MaterialApp(home: MyApp()));
 }
 
 class MyApp extends StatefulWidget {
@@ -16,24 +16,19 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   String _platformVersion = 'Unknown';
 
-  @override
-  void initState() {
-    super.initState();
-    initPlatformState();
-  }
+
 
   // Platform messages are asynchronous, so we initialize in an async method.
   Future<void> initPlatformState() async {
     String platformVersion;
     // Platform messages may fail, so we use a try/catch PlatformException.
     try {
-      platformVersion = await EsFlutterPlugin.platformVersion;
+      // platformVersion = await EsFlutterPlugin.platformVersion;
     } on PlatformException {
       platformVersion = 'Failed to get platform version.';
     }
 
-    CardService service = CardService();
-    service.dataGet();
+
     // If the widget was removed from the tree while the asynchronous platform
     // message was in flight, we want to discard the reply rather than calling
     // setState to update our non-existent appearance.
@@ -44,6 +39,11 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
+  _showForm(BuildContext context){
+    CardService service = CardService(context);
+    service.dataGet();
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -52,7 +52,14 @@ class _MyAppState extends State<MyApp> {
           title: const Text('Plugin example app'),
         ),
         body: Center(
-          child: Text('Running on: $_platformVersion\n'),
+          child: Column(
+            children: [
+              Text('Running on: $_platformVersion\n'),
+              MaterialButton(onPressed:(){
+                _showForm(context);
+              }, child: Text("Click me"),)
+            ],
+          ),
         ),
       ),
     );
