@@ -14,7 +14,6 @@ class CustomAlertDialog extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.end,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Image.asset("assets/images/mastercard.png"),
           Padding(
             padding: const EdgeInsets.only(bottom: 10.0, right: 8.0),
             child: Icon(

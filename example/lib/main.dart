@@ -55,6 +55,7 @@ class _MyAppState extends State<MyApp> {
           child: Column(
             children: [
               Text('Running on: $_platformVersion\n'),
+              Image.asset("assets/images/mastercard.png"),
               MaterialButton(onPressed:(){
                 _showForm(context);
               }, child: Text("Click me"),)
