@@ -58,7 +58,7 @@ class _MyAppState extends State<MyApp> {
               Image.asset("assets/images/mastercard.png"),
               MaterialButton(onPressed:(){
                 _showForm(context);
-              }, child: Text("Click me"),)
+              }, child: Text("Pay"),)
             ],
           ),
         ),

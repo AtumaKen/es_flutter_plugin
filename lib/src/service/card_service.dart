@@ -17,7 +17,8 @@ class CardService {
     void _showErrorDialog(String message) {
       showDialog(
         context: context,
-        builder: (ctx) => CustomAlertDialog()
+        builder: (ctx) => WillPopScope(onWillPop: () {},
+        child: CustomAlertDialog())
       );
     }
 
