@@ -7,6 +7,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class CardNumberInputField extends StatefulWidget {
+  final PaymentCard _paymentCard;
+
+  const CardNumberInputField( this._paymentCard);
 
   @override
   _CardNumberInputFieldState createState() => _CardNumberInputFieldState();
@@ -53,7 +56,7 @@ class _CardNumberInputFieldState extends State<CardNumberInputField> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 60,
+      height: 100,
       child: Theme(
         data: ThemeData(primarySwatch: Colors.green),
         child: TextFormField(
@@ -63,6 +66,8 @@ class _CardNumberInputFieldState extends State<CardNumberInputField> {
             CardNumberInputFormatter()
           ],
           keyboardType: TextInputType.number,
+          onSaved: (value)=> widget._paymentCard.number = CardUtils.getCleanedNumber(value),
+          validator: (input)=> CardUtils.validateCardNumWithLuhnAlgorithm(input),
           controller: _cardNumberController,
           cursorColor: Colors.green,
           textAlign: TextAlign.justify,

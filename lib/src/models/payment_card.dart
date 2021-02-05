@@ -1,13 +1,13 @@
 class PaymentCard {
-  CardType type;
   String number;
-  String name;
-  int month;
-  int year;
-  int cvv;
+  String pin;
+  String month;
+  String year;
+  String cvv;
+  String amount;
 
   PaymentCard(
-      {this.type, this.number, this.name, this.month, this.year, this.cvv});
+      {this.number, this.pin, this.month, this.year, this.cvv, this.amount});
 }
 
 enum CardType {

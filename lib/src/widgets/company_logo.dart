@@ -8,9 +8,11 @@ class CompanyLogo extends StatelessWidget {
       height: 50,
       width: 50,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(40)
+        borderRadius: BorderRadius.circular(40),
       ),
-      child: Image(image: AssetImage(("assets/images/easyswitch_icon.png"), package: Strings.packageName)),
+      child: Image(
+          image: AssetImage(("assets/images/easyswitch_icon.png"),
+              package: Strings.packageName)),
     );
   }
 }

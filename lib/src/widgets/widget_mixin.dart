@@ -5,31 +5,18 @@ import 'package:flutter/material.dart';
 
 mixin CardStateMixin on State {
   bool isProcessing = false;
-  String confirmationMessage = 'Do you want to cancel payment?';
+  String confirmationMessage = 'Do you want to cancel this Transaction?';
   bool alwaysPop = false;
 
   Widget buildChild(BuildContext context);
 
-
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(child: buildChild(context), onWillPop: _onWillPop);
+    return WillPopScope(
+        child: buildChild(context), onWillPop: () => _onWillPop());
   }
 
   Future<bool> _onWillPop() async {
-    print("scoping");
-    // if (isProcessing) {
-    //   print("here 1");
-    //   return false;
-    // }
-
-    // var returnValue = getPopReturnValue();
-    // if (alwaysPop) {
-    //   Navigator.of(context).pop(returnValue);
-    //   print("here 2");
-    //   return false;
-    // }
-
     var text = new Text(confirmationMessage);
 
     var dialog = Platform.isIOS
@@ -71,7 +58,6 @@ mixin CardStateMixin on State {
                   })
             ],
           );
-    print("cool");
     bool exit = await showDialog<bool>(
           context: context,
           builder: (BuildContext context) => dialog,
@@ -81,12 +67,10 @@ mixin CardStateMixin on State {
     if (exit) {
       Navigator.of(context).pop();
     }
-    print("cooler");
     return false;
   }
 
   void onCancelPress() async {
-    print("we got here");
     bool close = await _onWillPop();
     if (close) {
       Navigator.of(context).pop(getPopReturnValue());
@@ -96,5 +80,4 @@ mixin CardStateMixin on State {
   getPopReturnValue() {
     return null;
   }
-
 }

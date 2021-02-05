@@ -4,7 +4,6 @@ class ExpiryInputFormatter extends TextInputFormatter {
   @override
   TextEditingValue formatEditUpdate(
       TextEditingValue oldValue, TextEditingValue newValue) {
-
     var text = newValue.text;
 
     if (newValue.selection.baseOffset == 0) {
@@ -23,7 +22,6 @@ class ExpiryInputFormatter extends TextInputFormatter {
     var string = buffer.toString();
     return newValue.copyWith(
         text: string,
-        selection: new TextSelection.collapsed(offset: string.length));
-    }
-
+        selection: TextSelection.collapsed(offset: string.length));
+  }
 }
