@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-mixin CardStateMixin on State {
+mixin CardStateMixin<T> on State {
   bool isProcessing = false;
   String confirmationMessage = 'Do you want to cancel this Transaction?';
   bool alwaysPop = false;
@@ -17,6 +17,9 @@ mixin CardStateMixin on State {
   }
 
   Future<bool> _onWillPop() async {
+    if (isProcessing) {
+      return false;
+    }
     var text = new Text(confirmationMessage);
 
     var dialog = Platform.isIOS

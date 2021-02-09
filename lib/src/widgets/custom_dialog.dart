@@ -12,7 +12,7 @@ import 'package:flutter/widgets.dart';
 
 import 'card_form_items.dart';
 
-enum CardMode { Card, OTP }
+enum CardMode { Card, OTP, Successful }
 
 class CustomAlertDialog extends StatefulWidget {
   @override
@@ -26,6 +26,7 @@ class _CustomAlertDialogState<CustomAlertDialog> extends State
   CardResponse _cardResponse;
   CardMode _cardMode = CardMode.Card;
   TextEditingController _controller = TextEditingController();
+  String _otp;
 
   @override
   void initState() {

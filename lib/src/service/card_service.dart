@@ -40,7 +40,7 @@ class CardService {
       }));
       print(jsonDecode(response.body));
       final responseData = jsonDecode(response.body) as Map<dynamic, dynamic>;
-      if (!responseData.containsKey("responseCode")) return null;
+      // if (!responseData.containsKey("responseCode")) return null;
       CardResponse cardResponse = CardResponse();
       cardResponse..message = responseData["message"];
       cardResponse..transactionRef = responseData["transactionRef"];
