@@ -2,6 +2,7 @@ import 'package:es_flutter_plugin/src/models/card_response.dart';
 import 'package:es_flutter_plugin/src/models/otp_model.dart';
 import 'package:es_flutter_plugin/src/models/payment_card.dart';
 import 'package:es_flutter_plugin/src/service/card_service.dart';
+import 'package:es_flutter_plugin/src/shared/charge_model.dart';
 import 'package:es_flutter_plugin/src/utilities/package_strings.dart';
 import 'package:es_flutter_plugin/src/widgets/otp_widget.dart';
 import 'package:es_flutter_plugin/src/widgets/buttons/button_widget.dart';
@@ -11,12 +12,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 import 'card_form_items.dart';
+import 'company_logo.dart';
 
 enum CardMode { Card, OTP, Successful }
 
 class CustomAlertDialog extends StatefulWidget {
+  final Charge _charge;
+
+   const CustomAlertDialog({Key key, Charge charge}) : _charge = charge, super(key: key);
+
   @override
-  _CustomAlertDialogState createState() => _CustomAlertDialogState();
+  _CustomAlertDialogState createState() => _CustomAlertDialogState(_charge);
 }
 
 class _CustomAlertDialogState<CustomAlertDialog> extends State
@@ -27,6 +33,9 @@ class _CustomAlertDialogState<CustomAlertDialog> extends State
   CardMode _cardMode = CardMode.Card;
   TextEditingController _controller = TextEditingController();
   String _otp;
+  final Charge _charge;
+
+  _CustomAlertDialogState(this._charge);
 
   @override
   void initState() {
@@ -74,11 +83,34 @@ class _CustomAlertDialogState<CustomAlertDialog> extends State
                         children: [
                           Center(
                             child: Padding(
-                              padding: const EdgeInsets.only(
-                                  left: 15.0, right: 15.0),
-                              child: _cardMode == CardMode.Card
-                                  ? CardForm(_formKey, _paymentCard)
-                                  : OTPWidget(_cardResponse.message, _controller),
+                              padding: const EdgeInsets.only(left: 15.0, right: 15.0),
+                              child: Column(
+                                children: [
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  Row(
+                                    mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      CompanyLogo(logo: _charge.logo),
+                                      Column(
+                                        children: [
+                                          Text("Pay NGN ${_charge.amount}"),
+                                          SizedBox(height: 5,),
+                                          Text(_charge.email)
+                                        ],
+                                      )
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  _cardMode == CardMode.Card
+                                      ? CardForm(_formKey, _paymentCard,)
+                                      : OTPWidget(_cardResponse.message, _controller),
+                                ],
+                              ),
                             ),
                           ),
                           Container(
