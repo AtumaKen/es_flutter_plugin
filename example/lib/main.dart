@@ -3,7 +3,6 @@ import 'dart:async';
 
 import 'package:flutter/services.dart';
 import 'package:es_flutter_plugin/es_flutter_plugin.dart';
-import 'package:es_flutter_plugin/src/service/card_service.dart';
 void main() {
   runApp(MaterialApp(home: MyApp()));
 }
@@ -39,10 +38,10 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
-  _showForm(BuildContext context){
-    CardService service = CardService(context);
-    service.dataGet();
+  Charge setUpCharge(){
+    return Charge(amount: "100", email: "atumaken@gmail.com", merchantKey: "pk1234", logo: Container());
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -57,7 +56,8 @@ class _MyAppState extends State<MyApp> {
               Text('Running on: $_platformVersion\n'),
               Image.asset("assets/images/mastercard.png"),
               MaterialButton(onPressed:(){
-                _showForm(context);
+                Charge charge = setUpCharge();
+                EasySwitchPlugin(context: context, charge: charge).validate();
               }, child: Text("Pay"),)
             ],
           ),
