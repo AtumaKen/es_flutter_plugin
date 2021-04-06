@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:es_flutter_plugin/es_flutter_plugin.dart';
+import 'package:es_flutter_plugin/src/shared/checkoutresponse.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -21,13 +21,25 @@ mixin CardStateMixin<T> on State {
     if (isProcessing) {
       return false;
     }
+
+    if (isProcessing) {
+      return false;
+    }
+
+    var returnValue = getPopReturnValue();
+    if (alwaysPop ||
+        (returnValue != null &&
+            (returnValue is CheckoutResponse && returnValue.status == true))) {
+      Navigator.of(context).pop(returnValue);
+      return false;
+    }
     var text = new Text(confirmationMessage);
 
     var dialog = Platform.isIOS
-        ? new CupertinoAlertDialog(
+        ?  CupertinoAlertDialog(
             content: text,
             actions: <Widget>[
-              new CupertinoDialogAction(
+               CupertinoDialogAction(
                 child: const Text('Yes'),
                 isDestructiveAction: true,
                 onPressed: () {
@@ -35,7 +47,7 @@ mixin CardStateMixin<T> on State {
                   // _onWillPop will pop again.
                 },
               ),
-              new CupertinoDialogAction(
+               CupertinoDialogAction(
                 child: const Text('No'),
                 isDefaultAction: true,
                 onPressed: () {
@@ -45,16 +57,16 @@ mixin CardStateMixin<T> on State {
               ),
             ],
           )
-        : new AlertDialog(
+        :  AlertDialog(
             content: text,
             actions: <Widget>[
-              new FlatButton(
+               FlatButton(
                   child: const Text('NO'),
                   onPressed: () {
                     Navigator.of(context).pop(
                         false); // Pops the confirmation dialog but not the page.
                   }),
-              new FlatButton(
+               FlatButton(
                   child: const Text('YES'),
                   onPressed: () {
                     Navigator.of(context).pop(
@@ -69,7 +81,7 @@ mixin CardStateMixin<T> on State {
         false;
 
     if (exit) {
-      Navigator.of(context).pop();
+      Navigator.of(context).pop(returnValue);
     }
     return false;
   }

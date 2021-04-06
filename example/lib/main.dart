@@ -3,6 +3,7 @@ import 'dart:async';
 
 import 'package:flutter/services.dart';
 import 'package:es_flutter_plugin/es_flutter_plugin.dart';
+
 void main() {
   runApp(MaterialApp(home: MyApp()));
 }
@@ -15,8 +16,6 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   String _platformVersion = 'Unknown';
 
-
-
   // Platform messages are asynchronous, so we initialize in an async method.
   Future<void> initPlatformState() async {
     String platformVersion;
@@ -26,7 +25,6 @@ class _MyAppState extends State<MyApp> {
     } on PlatformException {
       platformVersion = 'Failed to get platform version.';
     }
-
 
     // If the widget was removed from the tree while the asynchronous platform
     // message was in flight, we want to discard the reply rather than calling
@@ -38,10 +36,13 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
-  Charge setUpCharge(){
-    return Charge(amount: "100", email: "atumaken@gmail.com", merchantKey: "pk1234", logo: Container());
+  Charge setUpCharge() {
+    return Charge(
+        amount: "100",
+        email: "atumaken@gmail.com",
+        merchantKey: "pk1234",
+        logo: Container());
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -55,10 +56,13 @@ class _MyAppState extends State<MyApp> {
             children: [
               Text('Running on: $_platformVersion\n'),
               Image.asset("assets/images/mastercard.png"),
-              MaterialButton(onPressed:(){
-                Charge charge = setUpCharge();
-                EasySwitchPlugin(context: context, charge: charge).validate();
-              }, child: Text("Pay"),)
+              MaterialButton(
+                onPressed: () {
+                  Charge charge = setUpCharge();
+                  EasySwitchPlugin(context: context, charge: charge).validate();
+                },
+                child: Text("Pay"),
+              )
             ],
           ),
         ),

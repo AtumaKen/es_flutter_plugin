@@ -1,8 +1,8 @@
 import 'package:es_flutter_plugin/src/models/card_response.dart';
 import 'package:es_flutter_plugin/src/models/otp_model.dart';
 import 'package:es_flutter_plugin/src/models/payment_card.dart';
-import 'package:es_flutter_plugin/src/service/card_service.dart';
 import 'package:es_flutter_plugin/src/shared/charge_model.dart';
+import 'package:es_flutter_plugin/src/shared/checkoutresponse.dart';
 import 'package:es_flutter_plugin/src/utilities/package_strings.dart';
 import 'package:es_flutter_plugin/src/widgets/otp_widget.dart';
 import 'package:es_flutter_plugin/src/widgets/buttons/button_widget.dart';
@@ -19,7 +19,9 @@ enum CardMode { Card, OTP, Successful }
 class CustomAlertDialog extends StatefulWidget {
   final Charge _charge;
 
-   const CustomAlertDialog({Key key, Charge charge}) : _charge = charge, super(key: key);
+  const CustomAlertDialog({Key key, Charge charge})
+      : _charge = charge,
+        super(key: key);
 
   @override
   _CustomAlertDialogState createState() => _CustomAlertDialogState(_charge);
@@ -32,8 +34,8 @@ class _CustomAlertDialogState<CustomAlertDialog> extends State
   CardResponse _cardResponse;
   CardMode _cardMode = CardMode.Card;
   TextEditingController _controller = TextEditingController();
-  String _otp;
   final Charge _charge;
+  CheckoutResponse _response;
 
   _CustomAlertDialogState(this._charge);
 
@@ -83,7 +85,8 @@ class _CustomAlertDialogState<CustomAlertDialog> extends State
                         children: [
                           Center(
                             child: Padding(
-                              padding: const EdgeInsets.only(left: 15.0, right: 15.0),
+                              padding: const EdgeInsets.only(
+                                  left: 15.0, right: 15.0),
                               child: Column(
                                 children: [
                                   SizedBox(
@@ -91,13 +94,15 @@ class _CustomAlertDialogState<CustomAlertDialog> extends State
                                   ),
                                   Row(
                                     mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
                                       CompanyLogo(logo: _charge.logo),
                                       Column(
                                         children: [
                                           Text("Pay NGN ${_charge.amount}"),
-                                          SizedBox(height: 5,),
+                                          SizedBox(
+                                            height: 5,
+                                          ),
                                           Text(_charge.email)
                                         ],
                                       )
@@ -107,8 +112,12 @@ class _CustomAlertDialogState<CustomAlertDialog> extends State
                                     height: 10,
                                   ),
                                   _cardMode == CardMode.Card
-                                      ? CardForm(_formKey, _paymentCard,)
-                                      : OTPWidget(_cardResponse.message, _controller),
+                                      ? CardForm(
+                                          _formKey,
+                                          _paymentCard,
+                                        )
+                                      : OTPWidget(
+                                          _cardResponse.message, _controller),
                                 ],
                               ),
                             ),
@@ -152,15 +161,23 @@ class _CustomAlertDialogState<CustomAlertDialog> extends State
     if (!_formKey.currentState.validate()) return;
     _formKey.currentState.save();
     FocusScope.of(context).unfocus();
-    _cardResponse = await CardService.submitCardDetails(_paymentCard);
+//    _cardResponse = await CardService.submitCardDetails(_paymentCard);
+    _cardResponse = CardResponse(message: "Stuff", transactionRef: "Stuffer");
     setState(() {
       _cardMode = CardMode.OTP;
     });
   }
-  _confirmOtp(){
+
+  _confirmOtp() {
     OTPModel otpModel = OTPModel();
     otpModel.paymentCard = _paymentCard;
     otpModel.otp = _controller.text;
-    CardService.confirmOtp(otpModel);
+//    CardService.confirmOtp(otpModel);
+    _response = CheckoutResponse(message: "Success");
+  }
+
+  @override
+  getPopReturnValue() {
+    return _response;
   }
 }

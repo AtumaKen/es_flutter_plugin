@@ -3,9 +3,10 @@ import 'package:flutter/material.dart';
 
 class SuccessfulWidget extends StatefulWidget {
   final int amount;
-  final VoidCallback onCountdownComplete;
 
-  SuccessfulWidget({@required this.amount, @required this.onCountdownComplete});
+  SuccessfulWidget({
+    @required this.amount,
+  });
 
   @override
   _SuccessfulWidgetState createState() {
@@ -13,20 +14,17 @@ class SuccessfulWidget extends StatefulWidget {
   }
 }
 
-class _SuccessfulWidgetState extends State<SuccessfulWidget>
-    with SingleTickerProviderStateMixin {
-  final sizedBox = const SizedBox(height: 20.0);
-  AnimationController _mainController;
-
+class _SuccessfulWidgetState extends State<SuccessfulWidget> {
   @override
   void initState() {
     super.initState();
-
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Column(children: [
+      Icon(Icons.check, size: 30, color: Colors.green,),
+      Text("You have successfully paid ${widget.amount} naira"),
+    ],);
   }
-
 }

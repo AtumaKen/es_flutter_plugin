@@ -45,16 +45,24 @@ class CardService {
       return cardResponse;
     }
 
-    static Future<void> confirmOtp(OTPModel otpModel) async{
-      final response = await http.post("https://easyswitchgroup.com/appApi/confirmOtp.php", body: jsonEncode({
-        "cardNo" : otpModel.paymentCard.number,
-        "expiryYear" : otpModel.paymentCard.year,
-        "expiryMonth" : otpModel.paymentCard.month,
-        "ccvn" : otpModel.paymentCard.cvv,
-        "cardPin" : num.tryParse(otpModel.paymentCard.pin),
-        "clientEmailPO" : "atumakk@gmail.com",
-        "otp" : otpModel.otp
-      }));
-      print(jsonDecode(response.body));
+//    static Future<CheckoutResponse> confirmOtp(OTPModel otpModel) async{
+  static Future<void> confirmOtp(OTPModel otpModel) async{
+       try {
+         final response = await http.post(
+             "https://easyswitchgroup.com/appApi/confirmOtp.php",
+             body: jsonEncode({
+               "cardNo": otpModel.paymentCard.number,
+               "expiryYear": otpModel.paymentCard.year,
+               "expiryMonth": otpModel.paymentCard.month,
+               "ccvn": otpModel.paymentCard.cvv,
+               "cardPin": num.tryParse(otpModel.paymentCard.pin),
+               "clientEmailPO": "atumakk@gmail.com",
+               "otp": otpModel.otp
+             }));
+         print(jsonDecode(response.body));
+       } catch(e){
+         print(e.toString());
+         throw e;
+       }
     }
 }
