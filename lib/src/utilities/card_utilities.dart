@@ -10,7 +10,7 @@ class CardUtils {
       cardType = CardType.Visa;
     } else if (input.startsWith(RegExp(r'((506(0|1))|(507(8|9))|(6500))'))) {
       cardType = CardType.Verve;
-    } else if (input.length <= 8) {
+    } else if (input.length >= 8) {
       cardType = CardType.Others;
     } else {
       cardType = CardType.Invalid;

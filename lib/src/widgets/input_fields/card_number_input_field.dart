@@ -8,14 +8,16 @@ import 'package:flutter/services.dart';
 
 class CardNumberInputField extends StatefulWidget {
   final PaymentCard _paymentCard;
+  final Function(CardType) _cardTypeState;
 
-  const CardNumberInputField( this._paymentCard);
+
+  const CardNumberInputField( this._paymentCard, this._cardTypeState);
 
   @override
-  _CardNumberInputFieldState createState() => _CardNumberInputFieldState();
+  CardNumberInputFieldState createState() => CardNumberInputFieldState();
 }
 
-class _CardNumberInputFieldState extends State<CardNumberInputField> {
+class CardNumberInputFieldState extends State<CardNumberInputField> {
   final TextEditingController _cardNumberController = TextEditingController();
   static final String _logoPath = "assets/images";
   static CardType _cardType;
@@ -40,8 +42,10 @@ class _CardNumberInputFieldState extends State<CardNumberInputField> {
     CardType cardType = CardUtils.getCardTypeFrmNumber(cleanedDigits);
     setState(() {
       _cardType = cardType;
+      widget._cardTypeState(_cardType);
       _getIconColor();
     });
+    print(cardType.toString());
   }
 
   _getIconColor() {
