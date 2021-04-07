@@ -19,16 +19,16 @@ enum CardMode { Card, OTP, Successful }
 
 class CustomAlertDialog extends StatefulWidget {
   final Charge _charge;
-  final InitializationResponse _response;
+  final InitializationResponse _initializationResponse;
 
   const CustomAlertDialog(
-      {Key key, Charge charge, InitializationResponse response})
+      {Key key, Charge charge, InitializationResponse initializationResponse})
       : _charge = charge,
-        _response = response,
+        _initializationResponse = initializationResponse,
         super(key: key);
 
   @override
-  _CustomAlertDialogState createState() => _CustomAlertDialogState(_charge);
+  _CustomAlertDialogState createState() => _CustomAlertDialogState(_charge, _initializationResponse);
 }
 
 class _CustomAlertDialogState<CustomAlertDialog> extends State
@@ -40,8 +40,9 @@ class _CustomAlertDialogState<CustomAlertDialog> extends State
   TextEditingController _controller = TextEditingController();
   final Charge _charge;
   CheckoutResponse _response;
+  InitializationResponse _initializationResponse;
 
-  _CustomAlertDialogState(this._charge);
+  _CustomAlertDialogState(this._charge, this._initializationResponse);
 
   @override
   void initState() {
@@ -100,7 +101,7 @@ class _CustomAlertDialogState<CustomAlertDialog> extends State
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-                                      CompanyLogo(logo: _charge.logo),
+                                      CompanyLogo(logo: _charge.logo, logoUrl: _initializationResponse.logoUrl,),
                                       Column(
                                         children: [
                                           Text("Pay NGN ${_charge.amount}"),

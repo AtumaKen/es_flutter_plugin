@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 
 class CompanyLogo extends StatelessWidget {
   final Widget logo;
+  final String logoUrl;
 
-  const CompanyLogo({this.logo}) ;
+  const CompanyLogo({this.logo, this.logoUrl});
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -13,9 +15,19 @@ class CompanyLogo extends StatelessWidget {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(40),
       ),
-      child: logo == null ? Image(
-          image:  AssetImage(("assets/images/easyswitch_icon.png"),
-              package: Strings.packageName))  : logo,
+      child: _logo(),
     );
+  }
+
+  Widget _logo() {
+    print("checking logo");
+    if (logo != null)
+      return logo;
+    // else if (logoUrl.isNotEmpty)
+    //   return Image(image: NetworkImage(logoUrl));
+    else
+      return Image(
+          image: AssetImage(("assets/images/easyswitch_icon.png"),
+              package: Strings.packageName));
   }
 }

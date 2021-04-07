@@ -38,7 +38,7 @@ class _MyAppState extends State<MyApp> {
 
   Charge setUpCharge() {
     return Charge(
-        amount: "100000000000000", email: "atumaken@gmail.com", logo: Container());
+        amount: "100000000000000", email: "atumaken@gmail.com",);
   }
 
   @override

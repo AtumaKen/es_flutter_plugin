@@ -47,7 +47,7 @@ class EasySwitchPlugin {
         context: _context,
         builder: (ctx) => CustomAlertDialog(
               charge: _charge,
-              response: initializationResponse,
+              initializationResponse: initializationResponse,
             ));
     print(response.message);
 
