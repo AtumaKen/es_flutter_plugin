@@ -7,21 +7,26 @@ import 'package:flutter/material.dart';
 
 class EasySwitchPlugin {
   Charge _charge;
+  String _merchantKey;
   BuildContext _context;
 
-  EasySwitchPlugin({@required Charge charge, @required BuildContext context})
+  EasySwitchPlugin({@required Charge charge, @required BuildContext context, @required merchantKey})
       : _charge = charge,
-        _context = context;
+        _context = context, _merchantKey = merchantKey;
 
   validate() {
     if (_context == null) {
       throw NoContextException("Context has to be provided");
     } else if (_charge == null ||
-        _charge.merchantKey.isEmpty ||
-        !_charge.merchantKey.startsWith("pk"))
+        _merchantKey.isEmpty ||
+        !_merchantKey.startsWith("pk"))
       throw InvalidMerchantKeyException("Merchant key is invalid");
 
     _pay();
+  }
+
+  void initializeSdk(){
+
   }
 
   Future<CheckoutResponse> _pay() async {

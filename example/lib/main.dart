@@ -40,7 +40,6 @@ class _MyAppState extends State<MyApp> {
     return Charge(
         amount: "100",
         email: "atumaken@gmail.com",
-        merchantKey: "pk1234",
         logo: Container());
   }
 
@@ -59,7 +58,7 @@ class _MyAppState extends State<MyApp> {
               MaterialButton(
                 onPressed: () {
                   Charge charge = setUpCharge();
-                  EasySwitchPlugin(context: context, charge: charge).validate();
+                  EasySwitchPlugin(context: context, charge: charge, merchantKey: "pk1234").validate();
                 },
                 child: Text("Pay"),
               )
