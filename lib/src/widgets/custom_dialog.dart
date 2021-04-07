@@ -1,4 +1,5 @@
 import 'package:es_flutter_plugin/src/models/card_response.dart';
+import 'package:es_flutter_plugin/src/models/initializationResponse.dart';
 import 'package:es_flutter_plugin/src/models/otp_model.dart';
 import 'package:es_flutter_plugin/src/models/payment_card.dart';
 import 'package:es_flutter_plugin/src/shared/charge_model.dart';
@@ -18,9 +19,12 @@ enum CardMode { Card, OTP, Successful }
 
 class CustomAlertDialog extends StatefulWidget {
   final Charge _charge;
+  final InitializationResponse _response;
 
-  const CustomAlertDialog({Key key, Charge charge})
+  const CustomAlertDialog(
+      {Key key, Charge charge, InitializationResponse response})
       : _charge = charge,
+        _response = response,
         super(key: key);
 
   @override
