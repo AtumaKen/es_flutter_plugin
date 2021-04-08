@@ -34,7 +34,7 @@ class CardUtils {
 
     if (input.length < 8) {
       // No need to even proceed with the validation if it's less than 8 characters
-      return "This number is invalid";
+      return "This card number is invalid";
     }
 
     int sum = 0;
