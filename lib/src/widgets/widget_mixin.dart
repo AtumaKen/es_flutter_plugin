@@ -36,10 +36,10 @@ mixin CardStateMixin<T> on State {
     var text = new Text(confirmationMessage);
 
     var dialog = Platform.isIOS
-        ?  CupertinoAlertDialog(
+        ? CupertinoAlertDialog(
             content: text,
             actions: <Widget>[
-               CupertinoDialogAction(
+              CupertinoDialogAction(
                 child: const Text('Yes'),
                 isDestructiveAction: true,
                 onPressed: () {
@@ -47,7 +47,7 @@ mixin CardStateMixin<T> on State {
                   // _onWillPop will pop again.
                 },
               ),
-               CupertinoDialogAction(
+              CupertinoDialogAction(
                 child: const Text('No'),
                 isDefaultAction: true,
                 onPressed: () {
@@ -57,16 +57,16 @@ mixin CardStateMixin<T> on State {
               ),
             ],
           )
-        :  AlertDialog(
+        : AlertDialog(
             content: text,
             actions: <Widget>[
-               FlatButton(
+              FlatButton(
                   child: const Text('NO'),
                   onPressed: () {
                     Navigator.of(context).pop(
                         false); // Pops the confirmation dialog but not the page.
                   }),
-               FlatButton(
+              FlatButton(
                   child: const Text('YES'),
                   onPressed: () {
                     Navigator.of(context).pop(

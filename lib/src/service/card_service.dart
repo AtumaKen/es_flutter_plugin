@@ -26,23 +26,34 @@ class CardService {
   //   }
 
   static Future<CardResponse> submitCardDetails(PaymentCard paymentCard) async {
-    final response = await http.post("https://easyswitchgroup.com/appApi/",
-        body: jsonEncode({
-          "cardNo": paymentCard.number,
-          "expiryYear": paymentCard.year,
-          "expiryMonth": paymentCard.month,
-          "ccvn": paymentCard.cvv,
-          "cardPin": num.tryParse(paymentCard.pin),
-          "clientEmailPO": "atumakk@gmail.com",
-          "amountPO": 100
-        }));
+    print("this is " + paymentCard.amount);
+    final response =
+        await http.post("https://easyswitchgroup.com/appApi/appSdkLink.php",
+            body: jsonEncode({
+              "cardNo": paymentCard.number,
+              "expiryYear": paymentCard.year,
+              "expiryMonth": paymentCard.month,
+              "ccvn": paymentCard.cvv,
+              "cardPin": num.tryParse(paymentCard.pin),
+              "clientEmailPO": paymentCard.email,
+              "amountPO": paymentCard.amount
+            }));
     print(jsonDecode(response.body));
-    final responseData = jsonDecode(response.body) as Map<dynamic, dynamic>;
-    // if (!responseData.containsKey("responseCode")) return null;
     CardResponse cardResponse = CardResponse();
+    final responseData = jsonDecode(response.body) as Map<dynamic, dynamic>;
+    final switchData = responseData["switchData"] as Map<dynamic, dynamic>;
+    if (switchData.containsKey("errors")) {
+      return cardResponse
+        ..error = true
+        ..message = switchData["errors"][0]["message"]
+        ..amount = "0"
+        ..status = responseData["status"];
+    }
     cardResponse
-      ..message = responseData["message"]
-      ..transactionRef = responseData["transactionRef"];
+      ..message = switchData["message"]
+      ..status = responseData["status"]
+      ..amount = switchData["amount"]
+      ..error = false;
     return cardResponse;
   }
 
@@ -56,7 +67,9 @@ class CardService {
                 "expiryYear": otpModel.paymentCard.year,
                 "expiryMonth": otpModel.paymentCard.month,
                 "ccvn": otpModel.paymentCard.cvv,
-                "cardPin": num.tryParse(otpModel.paymentCard.pin),
+                "cardPin": otpModel.paymentCard.pin.isEmpty
+                    ? ""
+                    : num.tryParse(otpModel.paymentCard.pin),
                 "clientEmailPO": "atumakk@gmail.com",
                 "otp": otpModel.otp
               }));

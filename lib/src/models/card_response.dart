@@ -1,5 +1,7 @@
 class CardResponse{
-  String transactionRef;
   String message;
-  CardResponse({this.transactionRef, this.message});
+  int status;
+  bool error;
+  String amount;
+  CardResponse({this.message, this.status, this.error, this.amount});
 }

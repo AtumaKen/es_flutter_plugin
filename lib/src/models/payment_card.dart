@@ -5,9 +5,10 @@ class PaymentCard {
   String year;
   String cvv;
   String amount;
+  String email;
 
   PaymentCard(
-      {this.number, this.pin, this.month, this.year, this.cvv, this.amount});
+      {this.number, this.pin, this.month, this.year, this.cvv, this.amount, this.email});
 }
 
 enum CardType {

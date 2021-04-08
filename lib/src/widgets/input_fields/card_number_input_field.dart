@@ -45,7 +45,6 @@ class CardNumberInputFieldState extends State<CardNumberInputField> {
       widget._cardTypeState(_cardType);
       _getIconColor();
     });
-    print(cardType.toString());
   }
 
   _getIconColor() {

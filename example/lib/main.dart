@@ -36,9 +36,19 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
+  TextEditingController emailController = TextEditingController();
+  TextEditingController amountController = TextEditingController();
+
   Charge setUpCharge() {
     return Charge(
-        amount: "100000000000000", email: "atumaken@gmail.com",);
+        amount: amountController.text, email: emailController.text,);
+  }
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    amountController.dispose();
+    emailController.dispose();
   }
 
   @override
@@ -48,24 +58,34 @@ class _MyAppState extends State<MyApp> {
         appBar: AppBar(
           title: const Text('Plugin example app'),
         ),
-        body: Center(
-          child: Column(
-            children: [
-              Text('Running on: $_platformVersion\n'),
-              Image.asset("assets/images/mastercard.png"),
-              MaterialButton(
-                onPressed: () {
-                  Charge charge = setUpCharge();
-                  EasySwitchPlugin(
-                    context: context,
-                    charge: charge,
-                    merchantKey:
-                        "pk_test_lPexiZEbPVLHpowBvz/kSGR7StYAxVE8QBJCqFtg3CC6cmA1rIMBGlTjpd8IG2Kn",
-                  ).validate();
-                },
-                child: Text("Pay"),
-              )
-            ],
+        body: Padding(
+          padding: const EdgeInsets.symmetric(horizontal:10.0, vertical: 8.0),
+          child: Center(
+            child: Column(
+              children: [
+//                Text('Running on: $_platformVersion\n'),
+                TextField(
+                  controller: emailController,
+                  decoration: InputDecoration(hintText: "Enter Email"),
+                ),
+                TextField(
+                  controller: amountController,
+                  decoration: InputDecoration(hintText: "Enter Amount"),
+                ),
+                MaterialButton(
+                  onPressed: () {
+                    Charge charge = setUpCharge();
+                    EasySwitchPlugin(
+                      context: context,
+                      charge: charge,
+                      merchantKey:
+                          "pk_test_lPexiZEbPVLHpowBvz/kSGR7StYAxVE8QBJCqFtg3CC6cmA1rIMBGlTjpd8IG2Kn",
+                    ).validate();
+                  },
+                  child: Text("Pay"),
+                )
+              ],
+            ),
           ),
         ),
       ),

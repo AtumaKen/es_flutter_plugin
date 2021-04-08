@@ -2,6 +2,7 @@ import 'package:es_flutter_plugin/src/models/payment_card.dart';
 import 'package:es_flutter_plugin/src/widgets/input_fields/card_pin_input_field.dart';
 import 'package:flutter/material.dart';
 
+import 'buttons/button_widget.dart';
 import 'input_fields/card_number_input_field.dart';
 import 'input_fields/cvv_input_field.dart';
 import 'input_fields/expiry_input_field.dart';
@@ -9,8 +10,9 @@ import 'input_fields/expiry_input_field.dart';
 class CardForm extends StatefulWidget {
   final GlobalKey<FormState> _formKey;
   final PaymentCard _paymentCard;
+  final Function _function;
 
-  const CardForm(this._formKey, this._paymentCard);
+  const CardForm(this._formKey, this._paymentCard, this._function);
 
   @override
   _CardFormState createState() => _CardFormState();
@@ -28,7 +30,6 @@ class _CardFormState extends State<CardForm> {
       setState(() {
         visibility = false;
       });
-    print(visibility);
   }
 
   @override
@@ -59,7 +60,13 @@ class _CardFormState extends State<CardForm> {
           ),
           Visibility(
               visible: visibility,
-              child: CardPinInputFiled(widget._paymentCard))
+              child: CardPinInputFiled(widget._paymentCard),),
+          Container(
+            alignment: Alignment.center,
+            child: ButtonWidget(
+                onPressed: widget._function, label: "Pay")
+
+          ),
         ],
       ),
     );
