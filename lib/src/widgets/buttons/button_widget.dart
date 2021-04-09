@@ -7,7 +7,8 @@ class ButtonWidget extends StatelessWidget {
   final Function onPressed;
   final String label;
 
-  const ButtonWidget({Key key, @required this.onPressed, @required this.label}) : super(key: key);
+  const ButtonWidget({Key key, @required this.onPressed, @required this.label})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +22,8 @@ class ButtonWidget extends StatelessWidget {
             elevation: 0,
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-            padding: EdgeInsets.symmetric(horizontal: deviceSize * 0.08, vertical: deviceSize * 0.018),
+            padding: EdgeInsets.symmetric(
+                horizontal: deviceSize * 0.08, vertical: deviceSize * 0.018),
             child: Text(
               label,
               style: TextStyle(color: Colors.white),

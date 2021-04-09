@@ -20,7 +20,7 @@ class ExpiryInputField extends StatelessWidget {
       obscureText: false,
       onSaved: (value) {
         List<int> expiry = CardUtils.getExpiryDate(value);
-         _paymentCard.month = expiry[0].toString();
+        _paymentCard.month = expiry[0].toString();
         _paymentCard.year = expiry[1].toString();
       },
       keyboardType: TextInputType.number,

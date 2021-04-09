@@ -10,8 +10,7 @@ class CardNumberInputField extends StatefulWidget {
   final PaymentCard _paymentCard;
   final Function(CardType) _cardTypeState;
 
-
-  const CardNumberInputField( this._paymentCard, this._cardTypeState);
+  const CardNumberInputField(this._paymentCard, this._cardTypeState);
 
   @override
   CardNumberInputFieldState createState() => CardNumberInputFieldState();
@@ -69,8 +68,10 @@ class CardNumberInputFieldState extends State<CardNumberInputField> {
             CardNumberInputFormatter()
           ],
           keyboardType: TextInputType.number,
-          onSaved: (value)=> widget._paymentCard.number = CardUtils.getCleanedNumber(value),
-          validator: (input)=> CardUtils.validateCardNumWithLuhnAlgorithm(input),
+          onSaved: (value) =>
+              widget._paymentCard.number = CardUtils.getCleanedNumber(value),
+          validator: (input) =>
+              CardUtils.validateCardNumWithLuhnAlgorithm(input),
           controller: _cardNumberController,
           cursorColor: Colors.green,
           textAlign: TextAlign.justify,

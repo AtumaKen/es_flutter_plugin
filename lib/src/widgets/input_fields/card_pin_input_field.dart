@@ -3,12 +3,12 @@ import 'package:es_flutter_plugin/src/widgets/input_fields/textfield_widget.dart
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import 'card_number_input_field.dart';
-
 class CardPinInputFiled extends StatefulWidget {
   final PaymentCard _paymentCard;
 
-  CardPinInputFiled(this._paymentCard,);
+  CardPinInputFiled(
+    this._paymentCard,
+  );
 
   @override
   _CardPinInputFiledState createState() => _CardPinInputFiledState();

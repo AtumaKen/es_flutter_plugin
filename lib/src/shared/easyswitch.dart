@@ -1,11 +1,14 @@
+import 'dart:io';
+
 import 'package:es_flutter_plugin/src/models/initializationResponse.dart';
 import 'package:es_flutter_plugin/src/service/card_service.dart';
 import 'package:es_flutter_plugin/src/shared/charge_model.dart';
 import 'package:es_flutter_plugin/src/shared/exceptions.dart';
 import 'package:es_flutter_plugin/src/widgets/custom_dialog.dart';
 import 'package:flutter/cupertino.dart';
-import 'checkoutresponse.dart';
 import 'package:flutter/material.dart';
+
+import 'checkoutresponse.dart';
 
 class EasySwitchPlugin {
   Charge _charge;
@@ -31,10 +34,15 @@ class EasySwitchPlugin {
   }
 
   void initializeSdk() async {
-    InitializationResponse response = await CardService.initializeSdk(
-        merchantKey: _merchantKey,
-        amount: _charge.amount,
-        email: _charge.email);
+    InitializationResponse response = InitializationResponse();
+    try {
+       response = await CardService.initializeSdk(
+          merchantKey: _merchantKey,
+          amount: _charge.amount,
+          email: _charge.email);
+    }on SocketException {
+      throw SocketException("There was a network error during initialization");
+    }
     if (response == null)
       throw AuthenticationException("Wrong Merchant key or Amount too large");
     _pay(response);

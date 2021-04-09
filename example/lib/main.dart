@@ -41,8 +41,11 @@ class _MyAppState extends State<MyApp> {
 
   Charge setUpCharge() {
     return Charge(
-        amount: amountController.text, email: emailController.text,);
+      amount: amountController.text,
+      email: emailController.text,
+    );
   }
+
   @override
   void dispose() {
     // TODO: implement dispose
@@ -59,7 +62,7 @@ class _MyAppState extends State<MyApp> {
           title: const Text('Plugin example app'),
         ),
         body: Padding(
-          padding: const EdgeInsets.symmetric(horizontal:10.0, vertical: 8.0),
+          padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 8.0),
           child: Center(
             child: Column(
               children: [

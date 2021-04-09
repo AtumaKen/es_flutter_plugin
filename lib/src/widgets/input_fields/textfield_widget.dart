@@ -13,17 +13,17 @@ class TextFieldWidget extends StatelessWidget {
   final FormFieldValidator<String> validator;
   final bool obscureText;
 
-   TextFieldWidget(
+  TextFieldWidget(
       {Key key,
-        this.inputFormatters,
-        this.keyboardType,
-        this.controller,
-        this.suffix,
-        this.obscureText,
-        this.onSaved,
-        this.labelText,
-        this.hintText,
-        this.validator})
+      this.inputFormatters,
+      this.keyboardType,
+      this.controller,
+      this.suffix,
+      this.obscureText,
+      this.onSaved,
+      this.labelText,
+      this.hintText,
+      this.validator})
       : super(key: key);
 
   @override

@@ -1,7 +1,9 @@
-class CardResponse{
+class CardResponse {
   String message;
   int status;
   bool error;
   String amount;
-  CardResponse({this.message, this.status, this.error, this.amount});
+  String paymentId;
+
+  CardResponse({this.message, this.status, this.error, this.amount, this.paymentId});
 }

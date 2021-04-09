@@ -7,26 +7,7 @@ import 'package:es_flutter_plugin/src/models/payment_card.dart';
 import 'package:http/http.dart' as http;
 
 class CardService {
-  // final BuildContext context;
-  //
-  // CardService(this.context);
-  //
-  //   Future<void> dataGet() async{
-  //     var response = await http.post("https://easyswitchgroup.com/esmerchant/", body: {
-  //
-  //     });
-  //     print(response.body);
-  //     _showErrorDialog("message");
-  //   }
-  //   void _showErrorDialog(String message) {
-  //     showDialog(
-  //       context: context,
-  //       builder: (ctx) => CustomAlertDialog()
-  //     );
-  //   }
-
   static Future<CardResponse> submitCardDetails(PaymentCard paymentCard) async {
-    print("this is " + paymentCard.amount);
     final response =
         await http.post("https://easyswitchgroup.com/appApi/appSdkLink.php",
             body: jsonEncode({
@@ -38,9 +19,9 @@ class CardService {
               "clientEmailPO": paymentCard.email,
               "amountPO": paymentCard.amount
             }));
-    print(jsonDecode(response.body));
     CardResponse cardResponse = CardResponse();
     final responseData = jsonDecode(response.body) as Map<dynamic, dynamic>;
+    print(responseData);
     final switchData = responseData["switchData"] as Map<dynamic, dynamic>;
     if (switchData.containsKey("errors")) {
       return cardResponse
@@ -53,6 +34,7 @@ class CardService {
       ..message = switchData["message"]
       ..status = responseData["status"]
       ..amount = switchData["amount"]
+      ..paymentId = switchData["paymentId"]
       ..error = false;
     return cardResponse;
   }
@@ -70,12 +52,11 @@ class CardService {
                 "cardPin": otpModel.paymentCard.pin.isEmpty
                     ? ""
                     : num.tryParse(otpModel.paymentCard.pin),
-                "clientEmailPO": "atumakk@gmail.com",
+                "clientEmailPO": otpModel.paymentCard.email,
                 "otp": otpModel.otp
               }));
       print(jsonDecode(response.body));
     } catch (e) {
-      print(e.toString());
       throw e;
     }
   }
@@ -90,7 +71,6 @@ class CardService {
                 "amount": amount,
                 "clientEmail": email,
               }));
-
       final res = jsonDecode(response.body) as Map<String, dynamic>;
       if (res["status"] == 200)
         return InitializationResponse(

@@ -10,22 +10,18 @@ class EasyswitchException implements Exception {
   }
 }
 
-class NoContextException extends EasyswitchException{
+class NoContextException extends EasyswitchException {
   NoContextException(String message) : super(message);
 }
 
-class AuthenticationException extends EasyswitchException{
+class AuthenticationException extends EasyswitchException {
   AuthenticationException(String message) : super(message);
-
 }
 
-class InvalidMerchantKeyException extends EasyswitchException{
+class InvalidMerchantKeyException extends EasyswitchException {
   InvalidMerchantKeyException(String message) : super(message);
-
 }
 
-class LogoException extends EasyswitchException{
+class LogoException extends EasyswitchException {
   LogoException(String message) : super(message);
-
 }
-

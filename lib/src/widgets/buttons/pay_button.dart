@@ -6,6 +6,7 @@ class PayButton extends StatelessWidget {
   final String label;
 
   const PayButton({Key key, this.function, this.label}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return ButtonWidget(onPressed: function, label: label);

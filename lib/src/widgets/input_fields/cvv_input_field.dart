@@ -4,10 +4,11 @@ import 'package:es_flutter_plugin/src/widgets/input_fields/textfield_widget.dart
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class CvvInputField extends StatelessWidget{
+class CvvInputField extends StatelessWidget {
   final PaymentCard _paymentCard;
 
-  const CvvInputField(this._paymentCard) ;
+  const CvvInputField(this._paymentCard);
+
   @override
   Widget build(BuildContext context) {
     return TextFieldWidget(
@@ -15,7 +16,7 @@ class CvvInputField extends StatelessWidget{
       hintText: "cvv",
       labelText: "cvv",
       obscureText: false,
-      onSaved: (value)=> _paymentCard.cvv = value,
+      onSaved: (value) => _paymentCard.cvv = value,
       inputFormatters: [
         FilteringTextInputFormatter.digitsOnly,
         LengthLimitingTextInputFormatter(4),
@@ -23,5 +24,4 @@ class CvvInputField extends StatelessWidget{
       validator: (String value) => CardUtils.validateCVV(value),
     );
   }
-
 }

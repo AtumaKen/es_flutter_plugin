@@ -6,6 +6,7 @@ class OTPField extends StatelessWidget {
   final TextEditingController controller;
 
   const OTPField({Key key, @required this.controller}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return TextFieldWidget(

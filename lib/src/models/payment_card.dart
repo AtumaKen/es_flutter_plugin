@@ -8,7 +8,13 @@ class PaymentCard {
   String email;
 
   PaymentCard(
-      {this.number, this.pin, this.month, this.year, this.cvv, this.amount, this.email});
+      {this.number,
+      this.pin,
+      this.month,
+      this.year,
+      this.cvv,
+      this.amount,
+      this.email});
 }
 
 enum CardType {

@@ -9,6 +9,7 @@ class OTPWidget extends StatelessWidget {
   final Function function;
 
   const OTPWidget(this.label, this.textEditingController, this.function);
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -17,12 +18,13 @@ class OTPWidget extends StatelessWidget {
           height: 10,
         ),
         Text(label),
-        SizedBox(height: 10,),
+        SizedBox(
+          height: 10,
+        ),
         OTPField(controller: textEditingController),
         Container(
           alignment: Alignment.center,
-          child:
-               ButtonWidget(
+          child: ButtonWidget(
             onPressed: function,
             label: "Confirm OTP",
           ),

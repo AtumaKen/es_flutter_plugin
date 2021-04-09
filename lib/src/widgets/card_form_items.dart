@@ -59,14 +59,12 @@ class _CardFormState extends State<CardForm> {
             ],
           ),
           Visibility(
-              visible: visibility,
-              child: CardPinInputFiled(widget._paymentCard),),
-          Container(
-            alignment: Alignment.center,
-            child: ButtonWidget(
-                onPressed: widget._function, label: "Pay")
-
+            visible: visibility,
+            child: CardPinInputFiled(widget._paymentCard),
           ),
+          Container(
+              alignment: Alignment.center,
+              child: ButtonWidget(onPressed: widget._function, label: "Pay")),
         ],
       ),
     );
