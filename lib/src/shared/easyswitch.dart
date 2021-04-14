@@ -41,16 +41,39 @@ class EasySwitchPlugin {
   void _initializeSdk() async {
     InitializationResponse response = InitializationResponse();
     try {
+      _progressDialog();
       response = await CardService.initializeSdk(
           merchantKey: _merchantKey,
           amount: _charge.amount,
           email: _charge.email);
+      Navigator.of(_context).pop();
     } on SocketException {
       throw SocketException("There was a network error during initialization");
     }
     if (response == null)
       throw AuthenticationException("Wrong Merchant key or Amount too large");
     _pay(response);
+  }
+
+  void _progressDialog() {
+    AlertDialog alert = AlertDialog(elevation: 0,
+      content: Row(
+        children: [
+          CircularProgressIndicator(
+            valueColor: AlwaysStoppedAnimation<Color>(Colors.green),
+          ),
+          Container(
+              margin: EdgeInsets.only(left: 15), child: Text("Initializing...")),
+        ],
+      ),
+    );
+    showDialog(
+      barrierDismissible: false,
+      context: _context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
   }
 
   Future<CheckoutResponse> _pay(
@@ -63,6 +86,7 @@ class EasySwitchPlugin {
               initializationResponse: initializationResponse,
             ));
     print(response.message);
+
     ///response should be returned up the stack
     return response;
   }
