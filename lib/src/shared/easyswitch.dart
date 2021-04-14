@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'checkoutresponse.dart';
 
 class EasySwitchPlugin {
+  //todo apply docs for the variables
   Charge _charge;
   String _merchantKey;
   BuildContext _context;
@@ -30,17 +31,21 @@ class EasySwitchPlugin {
         _merchantKey.isEmpty ||
         !_merchantKey.startsWith("pk"))
       throw InvalidMerchantKeyException("Merchant key is invalid");
-    initializeSdk();
+    else if (_charge.amount == null ||
+        _charge.amount.isEmpty ||
+        num.tryParse(_charge.amount) < 0)
+      throw InvalidAmountException("Amount invalid");
+    _initializeSdk();
   }
 
-  void initializeSdk() async {
+  void _initializeSdk() async {
     InitializationResponse response = InitializationResponse();
     try {
-       response = await CardService.initializeSdk(
+      response = await CardService.initializeSdk(
           merchantKey: _merchantKey,
           amount: _charge.amount,
           email: _charge.email);
-    }on SocketException {
+    } on SocketException {
       throw SocketException("There was a network error during initialization");
     }
     if (response == null)
@@ -58,7 +63,6 @@ class EasySwitchPlugin {
               initializationResponse: initializationResponse,
             ));
     print(response.message);
-
     ///response should be returned up the stack
     return response;
   }

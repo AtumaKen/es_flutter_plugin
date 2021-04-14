@@ -56,7 +56,6 @@ class _CustomAlertDialogState<CustomAlertDialog> extends State
   @override
   Widget buildChild(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
-
     return AnimatedPadding(
       padding: mediaQuery.viewInsets +
           const EdgeInsets.symmetric(horizontal: 20.0, vertical: 24.0),
@@ -158,7 +157,6 @@ class _CustomAlertDialogState<CustomAlertDialog> extends State
     if (_cardMode == CardMode.Card)
       setState(() {
         _cardViewState = CardForm(_formKey, _paymentCard, _onSaved);
-        changeView();
       });
     else if (_cardMode == CardMode.Error)
       setState(() {
@@ -171,7 +169,7 @@ class _CustomAlertDialogState<CustomAlertDialog> extends State
       });
   }
 
-  _onSaved() async {
+  Future<void> _onSaved() async {
     if (!_formKey.currentState.validate()) return;
     _formKey.currentState.save();
     FocusScope.of(context).unfocus();

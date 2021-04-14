@@ -3,13 +3,30 @@ import 'package:flutter/material.dart';
 
 import 'buttons/button_widget.dart';
 
-class OTPWidget extends StatelessWidget {
+class OTPWidget extends StatefulWidget {
   final String label;
   final TextEditingController textEditingController;
   final Function function;
 
-  const OTPWidget(this.label, this.textEditingController, this.function);
+  const OTPWidget(this.label, this.textEditingController, this.function,);
 
+  @override
+  _OTPWidgetState createState() => _OTPWidgetState();
+}
+
+class _OTPWidgetState extends State<OTPWidget> {
+  bool isLoading = false;
+  void _executeFunction(){
+    if(mounted)
+    setState((){
+      isLoading = true;
+    });
+    print("Is loading in otp is $isLoading");
+    widget.function();
+//    setState(() {
+//      isLoading = false;
+//    });
+  }
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -17,16 +34,17 @@ class OTPWidget extends StatelessWidget {
         SizedBox(
           height: 10,
         ),
-        Text(label),
+        Text(widget.label),
         SizedBox(
           height: 10,
         ),
-        OTPField(controller: textEditingController),
+        OTPField(controller: widget.textEditingController),
         Container(
           alignment: Alignment.center,
           child: ButtonWidget(
-            onPressed: function,
+            onPressed: _executeFunction,
             label: "Confirm OTP",
+            isLoading: isLoading,
           ),
         ),
       ],

@@ -25,3 +25,6 @@ class InvalidMerchantKeyException extends EasyswitchException {
 class LogoException extends EasyswitchException {
   LogoException(String message) : super(message);
 }
+class InvalidAmountException extends EasyswitchException{
+  InvalidAmountException(String message) : super(message);
+}

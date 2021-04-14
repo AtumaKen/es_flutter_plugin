@@ -1,22 +1,29 @@
-import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class ButtonWidget extends StatelessWidget {
   final Function onPressed;
   final String label;
+  final bool isLoading;
 
-  const ButtonWidget({Key key, @required this.onPressed, @required this.label})
+  const ButtonWidget(
+      {Key key, @required this.onPressed, @required this.label, this.isLoading})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final isIOS = Platform.isIOS;
     final deviceSize = MediaQuery.of(context).size.height;
-    return isIOS
-        ? CupertinoButton(
-            child: Text(label), color: Colors.green, onPressed: onPressed)
+    print(isLoading);
+    return isLoading
+        ? new Container(
+            width: 20.0,
+            height: 20.0,
+            child: new Theme(
+                data: Theme.of(context).copyWith(accentColor: Colors.green),
+                child: new CircularProgressIndicator(
+                  strokeWidth: 2.0,
+                )),
+          )
         : RaisedButton(
             onPressed: onPressed,
             elevation: 0,

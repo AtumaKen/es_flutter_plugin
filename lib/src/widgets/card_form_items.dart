@@ -1,18 +1,22 @@
-import 'package:es_flutter_plugin/src/models/payment_card.dart';
-import 'package:es_flutter_plugin/src/widgets/input_fields/card_pin_input_field.dart';
 import 'package:flutter/material.dart';
 
+import '../models/payment_card.dart';
 import 'buttons/button_widget.dart';
 import 'input_fields/card_number_input_field.dart';
+import 'input_fields/card_pin_input_field.dart';
 import 'input_fields/cvv_input_field.dart';
 import 'input_fields/expiry_input_field.dart';
 
 class CardForm extends StatefulWidget {
   final GlobalKey<FormState> _formKey;
   final PaymentCard _paymentCard;
-  final Function _function;
+  final Future<void> Function() _function;
 
-  const CardForm(this._formKey, this._paymentCard, this._function);
+  const CardForm(
+    this._formKey,
+    this._paymentCard,
+    this._function,
+  );
 
   @override
   _CardFormState createState() => _CardFormState();
@@ -20,6 +24,17 @@ class CardForm extends StatefulWidget {
 
 class _CardFormState extends State<CardForm> {
   bool visibility = false;
+  bool isLoading = false;
+
+  _submitCard() {
+    if (mounted)
+      setState(() {
+        isLoading = true;
+      });
+    widget._function().then((value) => setState(() {
+          isLoading = false;
+        }));
+  }
 
   void _cardState(CardType cardType) {
     if (cardType != CardType.Visa && cardType != CardType.Invalid)
@@ -64,7 +79,11 @@ class _CardFormState extends State<CardForm> {
           ),
           Container(
               alignment: Alignment.center,
-              child: ButtonWidget(onPressed: widget._function, label: "Pay")),
+              child: ButtonWidget(
+                onPressed: _submitCard,
+                label: "Pay",
+                isLoading: isLoading,
+              )),
         ],
       ),
     );
