@@ -20,7 +20,6 @@ class CompanyLogo extends StatelessWidget {
   }
 
   Widget _logo() {
-    print("checking logo");
     if (logo != null)
       return logo;
     // else if (logoUrl.isNotEmpty)

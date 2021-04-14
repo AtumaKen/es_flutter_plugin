@@ -55,15 +55,34 @@ class EasySwitchPlugin {
     _pay(response);
   }
 
+  Future<CheckoutResponse> _pay(
+      InitializationResponse initializationResponse) async {
+    CheckoutResponse response = CheckoutResponse();
+    response = await showDialog(
+        barrierDismissible: false,
+        context: _context,
+        builder: (ctx) => CustomAlertDialog(
+              charge: _charge,
+              initializationResponse: initializationResponse,
+            ));
+
+    ///response should be returned up the stack
+    return response;
+  }
+
   void _progressDialog() {
-    AlertDialog alert = AlertDialog(elevation: 0,
+    AlertDialog alert = AlertDialog(
+      elevation: 0,
       content: Row(
         children: [
-          CircularProgressIndicator(
-            valueColor: AlwaysStoppedAnimation<Color>(Colors.green),
-          ),
+          Platform.isIOS
+              ? CupertinoActivityIndicator()
+              : CircularProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation<Color>(Colors.green),
+                ),
           Container(
-              margin: EdgeInsets.only(left: 15), child: Text("Initializing...")),
+              margin: EdgeInsets.only(left: 15),
+              child: Text("Initializing...")),
         ],
       ),
     );
@@ -74,20 +93,5 @@ class EasySwitchPlugin {
         return alert;
       },
     );
-  }
-
-  Future<CheckoutResponse> _pay(
-      InitializationResponse initializationResponse) async {
-    CheckoutResponse response = await showDialog(
-        barrierDismissible: false,
-        context: _context,
-        builder: (ctx) => CustomAlertDialog(
-              charge: _charge,
-              initializationResponse: initializationResponse,
-            ));
-    print(response.message);
-
-    ///response should be returned up the stack
-    return response;
   }
 }

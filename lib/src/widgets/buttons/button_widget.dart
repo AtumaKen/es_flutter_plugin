@@ -13,7 +13,6 @@ class ButtonWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final deviceSize = MediaQuery.of(context).size.height;
-    print(isLoading);
     return isLoading
         ? new Container(
             width: 20.0,

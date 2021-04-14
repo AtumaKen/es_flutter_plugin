@@ -21,7 +21,6 @@ class _OTPWidgetState extends State<OTPWidget> {
     setState((){
       isLoading = true;
     });
-    print("Is loading in otp is $isLoading");
     widget.function();
 //    setState(() {
 //      isLoading = false;
