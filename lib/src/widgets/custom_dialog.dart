@@ -198,6 +198,6 @@ class _CustomAlertDialogState<CustomAlertDialog> extends State
 
   @override
   getPopReturnValue() {
-    return _response == null? CheckoutResponse() : _response;
+    return _response == null ? CheckoutResponse() : _response;
   }
 }

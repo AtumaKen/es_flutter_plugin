@@ -8,13 +8,6 @@ import 'package:http/http.dart' as http;
 
 class CardService {
   static Future<CardResponse> submitCardDetails(PaymentCard paymentCard) async {
-     print(paymentCard.number);
-    print(paymentCard.year);
-    print(paymentCard.month);
-    print(paymentCard.cvv);
-    // print(num.tryParse(paymentCard.pin));
-    print( paymentCard.email);
-
     final response =
         await http.post("https://easyswitchgroup.com/appApi/appSdkLink.php",
             body: jsonEncode({
@@ -22,7 +15,8 @@ class CardService {
               "expiryYear": paymentCard.year,
               "expiryMonth": paymentCard.month,
               "ccvn": paymentCard.cvv,
-              "cardPin": paymentCard.pin == null? "" : num.tryParse(paymentCard.pin),
+              "cardPin":
+                  paymentCard.pin == null ? "" : num.tryParse(paymentCard.pin),
               "clientEmailPO": paymentCard.email,
               "amountPO": paymentCard.amount
             }));
