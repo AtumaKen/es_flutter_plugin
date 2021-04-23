@@ -25,6 +25,7 @@ class EasySwitchPlugin {
         _merchantKey = merchantKey;
 
   validate() {
+      num.parse(_charge.amount);
     if (_context == null) {
       throw NoContextException("Context has to be provided");
     } else if (_charge == null ||

@@ -32,7 +32,6 @@ class _CardPinInputFiledState extends State<CardPinInputFiled> {
   @override
   Widget build(BuildContext context) {
     return TextFieldWidget(
-      keyboardType: TextInputType.number,
       obscureText: _obscureState,
       suffix: GestureDetector(
         child: Icon(

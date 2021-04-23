@@ -22,9 +22,6 @@ class _OTPWidgetState extends State<OTPWidget> {
       isLoading = true;
     });
     widget.function();
-//    setState(() {
-//      isLoading = false;
-//    });
   }
   @override
   Widget build(BuildContext context) {

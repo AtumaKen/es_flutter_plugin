@@ -160,13 +160,19 @@ class _CustomAlertDialogState<CustomAlertDialog> extends State
       });
     else if (_cardMode == CardMode.Error)
       setState(() {
-        _cardViewState = FailureWidget(message: _cardResponse.message);
+        _cardViewState = FailureWidget(message: _cardResponse.message, tryAgain: _tryNewCard,);
       });
     else if (_cardMode == CardMode.OTP)
       setState(() {
         _cardViewState =
             OTPWidget(_cardResponse.message, _controller, _confirmOtp);
       });
+  }
+  _tryNewCard(){
+    setState(() {
+      _cardMode = CardMode.Card;
+    });
+    changeView();
   }
 
   Future<void> _onSaved() async {

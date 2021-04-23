@@ -12,7 +12,7 @@ class CardService {
     print(paymentCard.year);
     print(paymentCard.month);
     print(paymentCard.cvv);
-    // print(num.tryParse(paymentCard.pin));
+    print(num.tryParse(paymentCard.pin  == null? "emppty pin" : paymentCard.pin));
     print( paymentCard.email);
 
     final response =
