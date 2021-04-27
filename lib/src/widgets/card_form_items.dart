@@ -11,11 +11,13 @@ class CardForm extends StatefulWidget {
   final GlobalKey<FormState> _formKey;
   final PaymentCard _paymentCard;
   final Future<void> Function() _function;
+//  final CardType Function(String) _getCardType;
 
   const CardForm(
     this._formKey,
     this._paymentCard,
     this._function,
+//      this._getCardType
   );
 
   @override
@@ -54,6 +56,7 @@ class _CardFormState extends State<CardForm> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+//          CardNumberInputField(widget._paymentCard, _cardState, widget._getCardType),
           CardNumberInputField(widget._paymentCard, _cardState),
           SizedBox(
             height: 5,

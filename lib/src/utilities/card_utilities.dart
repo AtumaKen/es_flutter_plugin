@@ -1,6 +1,6 @@
 import 'package:es_flutter_plugin/src/models/payment_card.dart';
 
-class CardUtils {
+class CardUtils  {
   static CardType getCardTypeFrmNumber(String input) {
     CardType cardType;
     if (input.startsWith(RegExp(

@@ -4,16 +4,41 @@ import 'package:es_flutter_plugin/src/models/card_response.dart';
 import 'package:es_flutter_plugin/src/models/initializationResponse.dart';
 import 'package:es_flutter_plugin/src/models/otp_model.dart';
 import 'package:es_flutter_plugin/src/models/payment_card.dart';
+import 'package:es_flutter_plugin/src/models/visa_transaction_model.dart';
 import 'package:http/http.dart' as http;
 
 class CardService {
-  static Future<CardResponse> submitCardDetails(PaymentCard paymentCard) async {
-     print(paymentCard.number);
+  CardResponse processOtherCards(Map<dynamic, dynamic> switchData)  {
+    CardResponse cardResponse = CardResponse();
+    if (switchData.containsKey("errors")) {
+      return cardResponse
+        ..error = true
+        ..message = switchData["errors"][0]["message"]
+        ..amount = "0"
+        ..status = switchData["status"];
+    }
+    cardResponse
+      ..message = switchData["message"]
+      ..status = switchData["status"]
+      ..amount = switchData["amount"]
+      ..paymentId = switchData["paymentId"]
+      ..error = false;
+    return cardResponse;
+  }
+
+  VisaResponseModel processVisaCards(Map<dynamic, dynamic> switchData){
+    return VisaResponseModel.fromJson(switchData);
+  }
+
+
+  Future<List<dynamic>> submitCardDetails(PaymentCard paymentCard) async {
+    print(paymentCard.number);
     print(paymentCard.year);
     print(paymentCard.month);
     print(paymentCard.cvv);
-    print(num.tryParse(paymentCard.pin  == null? "emppty pin" : paymentCard.pin));
-    print( paymentCard.email);
+    print(
+        num.tryParse(paymentCard.pin == null ? "emppty pin" : paymentCard.pin));
+    print(paymentCard.email);
 
     final response =
         await http.post("https://easyswitchgroup.com/appApi/appSdkLink.php",
@@ -22,28 +47,18 @@ class CardService {
               "expiryYear": paymentCard.year,
               "expiryMonth": paymentCard.month,
               "ccvn": paymentCard.cvv,
-              "cardPin": paymentCard.pin == null? "" : num.tryParse(paymentCard.pin),
+              "cardPin":
+                  paymentCard.pin == null ? "" : num.tryParse(paymentCard.pin),
               "clientEmailPO": paymentCard.email,
               "amountPO": paymentCard.amount
             }));
-    CardResponse cardResponse = CardResponse();
     final responseData = jsonDecode(response.body) as Map<dynamic, dynamic>;
-    print(responseData);
     final switchData = responseData["switchData"] as Map<dynamic, dynamic>;
-    if (switchData.containsKey("errors")) {
-      return cardResponse
-        ..error = true
-        ..message = switchData["errors"][0]["message"]
-        ..amount = "0"
-        ..status = responseData["status"];
+    switchData["status"] = responseData["status"];
+    if (switchData["responseCode"] as String  == "S0") {
+      return [true, switchData];
     }
-    cardResponse
-      ..message = switchData["message"]
-      ..status = responseData["status"]
-      ..amount = switchData["amount"]
-      ..paymentId = switchData["paymentId"]
-      ..error = false;
-    return cardResponse;
+    return [false, switchData];
   }
 
 //    static Future<CheckoutResponse> confirmOtp(OTPModel otpModel) async{

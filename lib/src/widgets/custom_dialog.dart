@@ -2,6 +2,7 @@ import 'package:es_flutter_plugin/src/models/card_response.dart';
 import 'package:es_flutter_plugin/src/models/initializationResponse.dart';
 import 'package:es_flutter_plugin/src/models/otp_model.dart';
 import 'package:es_flutter_plugin/src/models/payment_card.dart';
+import 'package:es_flutter_plugin/src/models/visa_transaction_model.dart';
 import 'package:es_flutter_plugin/src/service/card_service.dart';
 import 'package:es_flutter_plugin/src/shared/charge_model.dart';
 import 'package:es_flutter_plugin/src/shared/checkoutresponse.dart';
@@ -15,6 +16,7 @@ import 'package:flutter/widgets.dart';
 import 'card_form_items.dart';
 import 'company_logo.dart';
 import 'failure_widget.dart';
+import 'visa_web.dart';
 
 enum CardMode { Card, OTP, Successful, Error }
 
@@ -44,11 +46,13 @@ class _CustomAlertDialogState<CustomAlertDialog> extends State
   CheckoutResponse _response;
   InitializationResponse _initializationResponse;
   Widget _cardViewState;
+  CardService _cardService = CardService();
 
   _CustomAlertDialogState(this._charge, this._initializationResponse);
 
   @override
   void initState() {
+//    _cardViewState = CardForm(_formKey, _paymentCard, _onSaved, _getCardTypeFromNumber);
     _cardViewState = CardForm(_formKey, _paymentCard, _onSaved);
     super.initState();
   }
@@ -156,11 +160,15 @@ class _CustomAlertDialogState<CustomAlertDialog> extends State
   void changeView() {
     if (_cardMode == CardMode.Card)
       setState(() {
+//        _cardViewState = CardForm(_formKey, _paymentCard, _onSaved, _getCardTypeFromNumber);
         _cardViewState = CardForm(_formKey, _paymentCard, _onSaved);
       });
     else if (_cardMode == CardMode.Error)
       setState(() {
-        _cardViewState = FailureWidget(message: _cardResponse.message, tryAgain: _tryNewCard,);
+        _cardViewState = FailureWidget(
+          message: _cardResponse.message,
+          tryAgain: _tryNewCard,
+        );
       });
     else if (_cardMode == CardMode.OTP)
       setState(() {
@@ -168,12 +176,20 @@ class _CustomAlertDialogState<CustomAlertDialog> extends State
             OTPWidget(_cardResponse.message, _controller, _confirmOtp);
       });
   }
-  _tryNewCard(){
+
+  _tryNewCard() {
     setState(() {
       _cardMode = CardMode.Card;
     });
     changeView();
   }
+
+//  CardType _getCardTypeFromNumber(String number) {
+//    String cleanedDigits =
+//    CardUtils.getCleanedNumber(number);
+//     _cardType = CardUtils.getCardTypeFrmNumber(cleanedDigits);
+//    return _cardType;
+//  }
 
   Future<void> _onSaved() async {
     if (!_formKey.currentState.validate()) return;
@@ -182,16 +198,27 @@ class _CustomAlertDialogState<CustomAlertDialog> extends State
     _paymentCard
       ..email = _charge.email
       ..amount = _charge.amount;
-    _cardResponse = await CardService.submitCardDetails(_paymentCard);
-    _cardResponse.error
-        ? setState(() {
-            _cardMode = CardMode.Error;
-            changeView();
-          })
-        : setState(() {
-            _cardMode = CardMode.OTP;
-            changeView();
-          });
+    List<dynamic> serviceResponse =
+        await _cardService.submitCardDetails(_paymentCard);
+    if (serviceResponse[0] == false) {
+      _cardResponse = _cardService.processOtherCards(serviceResponse[1]);
+      _cardResponse.error
+          ? setState(() {
+              _cardMode = CardMode.Error;
+              changeView();
+            })
+          : setState(() {
+              _cardMode = CardMode.OTP;
+              changeView();
+            });
+    } else {
+      VisaResponseModel visaResponseModel =
+          _cardService.processVisaCards(serviceResponse[1]);
+      Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => VisaWebView(
+                visaResponseModel: visaResponseModel,
+              )));
+    }
   }
 
   _confirmOtp() {

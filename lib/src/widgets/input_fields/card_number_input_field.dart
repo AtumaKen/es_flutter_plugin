@@ -9,9 +9,10 @@ import 'package:flutter/services.dart';
 class CardNumberInputField extends StatefulWidget {
   final PaymentCard _paymentCard;
   final Function(CardType) _cardTypeState;
+//  final CardType Function(String) _getCardType;
 
+//  const CardNumberInputField(this._paymentCard, this._cardTypeState, this._getCardType);
   const CardNumberInputField(this._paymentCard, this._cardTypeState);
-
   @override
   CardNumberInputFieldState createState() => CardNumberInputFieldState();
 }
