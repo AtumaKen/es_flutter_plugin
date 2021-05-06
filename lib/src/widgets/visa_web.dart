@@ -19,6 +19,6 @@ class _VisaWebViewState extends State<VisaWebView> {
   }
   @override
   Widget build(BuildContext context) {
-    return WebView(initialUrl: widget.visaResponseModel.acsUrl,);
+    return WebView(initialUrl: widget.visaResponseModel.termUrl ,);
   }
 }
