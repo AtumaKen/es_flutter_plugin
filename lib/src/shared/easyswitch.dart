@@ -24,7 +24,7 @@ class EasySwitchPlugin {
         _context = context,
         _merchantKey = merchantKey;
 
-  validate() {
+  Future<CheckoutResponse> validate() async{
       num.parse(_charge.amount);
     if (_context == null) {
       throw NoContextException("Context has to be provided");
@@ -36,10 +36,11 @@ class EasySwitchPlugin {
         _charge.amount.isEmpty ||
         num.tryParse(_charge.amount) < 0)
       throw InvalidAmountException("Amount invalid");
-    _initializeSdk();
+    CheckoutResponse checkoutResponse = await _initializeSdk();
+    return checkoutResponse;
   }
 
-  void _initializeSdk() async {
+  Future<CheckoutResponse> _initializeSdk() async {
     InitializationResponse response = InitializationResponse();
     try {
       _progressDialog();
@@ -48,12 +49,14 @@ class EasySwitchPlugin {
           amount: _charge.amount,
           email: _charge.email);
       Navigator.of(_context).pop();
+      print(response.merchantId);
     } on SocketException {
       throw SocketException("There was a network error during initialization");
     }
     if (response == null)
       throw AuthenticationException("Wrong Merchant key or Amount too large");
-    _pay(response);
+    CheckoutResponse checkoutResponse = await _pay(response);
+    return checkoutResponse;
   }
 
   Future<CheckoutResponse> _pay(

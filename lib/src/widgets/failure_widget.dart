@@ -19,8 +19,17 @@ class FailureWidget extends StatelessWidget {
         SizedBox(
           height: 15,
         ),
-        Text(message),
-        ButtonWidget(onPressed: tryAgain, label: "Try Again", isLoading: false,)
+        Text(
+          message,
+        ),
+        SizedBox(
+          height: 10,
+        ),
+        ButtonWidget(
+          onPressed: tryAgain,
+          label: "Try Again",
+          isLoading: false,
+        ),
       ],
     );
   }

@@ -76,14 +76,15 @@ class _MyAppState extends State<MyApp> {
                   decoration: InputDecoration(hintText: "Enter Amount"),
                 ),
                 MaterialButton(
-                  onPressed: () {
+                  onPressed: () async {
                     Charge charge = setUpCharge();
-                    EasySwitchPlugin(
+                    final response = await EasySwitchPlugin(
                       context: context,
                       charge: charge,
                       merchantKey:
                           "pk_test_lPexiZEbPVLHpowBvz/kSGR7StYAxVE8QBJCqFtg3CC6cmA1rIMBGlTjpd8IG2Kn",
                     ).validate();
+                    print(response.amount);
                   },
                   child: Text("Pay"),
                 )

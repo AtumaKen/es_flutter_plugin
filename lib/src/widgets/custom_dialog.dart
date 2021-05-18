@@ -1,6 +1,7 @@
 import 'package:es_flutter_plugin/src/models/card_response.dart';
 import 'package:es_flutter_plugin/src/models/initializationResponse.dart';
 import 'package:es_flutter_plugin/src/models/otp_model.dart';
+import 'package:es_flutter_plugin/src/models/otp_response.dart';
 import 'package:es_flutter_plugin/src/models/payment_card.dart';
 import 'package:es_flutter_plugin/src/models/visa_transaction_model.dart';
 import 'package:es_flutter_plugin/src/service/card_service.dart';
@@ -8,6 +9,7 @@ import 'package:es_flutter_plugin/src/shared/charge_model.dart';
 import 'package:es_flutter_plugin/src/shared/checkoutresponse.dart';
 import 'package:es_flutter_plugin/src/utilities/package_strings.dart';
 import 'package:es_flutter_plugin/src/widgets/otp_widget.dart';
+import 'package:es_flutter_plugin/src/widgets/success_widget.dart';
 import 'package:es_flutter_plugin/src/widgets/widget_mixin.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -47,6 +49,8 @@ class _CustomAlertDialogState<CustomAlertDialog> extends State
   InitializationResponse _initializationResponse;
   Widget _cardViewState;
   CardService _cardService = CardService();
+  String cardMessage;
+  String _amount;
 
   _CustomAlertDialogState(this._charge, this._initializationResponse);
 
@@ -166,7 +170,7 @@ class _CustomAlertDialogState<CustomAlertDialog> extends State
     else if (_cardMode == CardMode.Error)
       setState(() {
         _cardViewState = FailureWidget(
-          message: _cardResponse.message,
+          message: cardMessage,
           tryAgain: _tryNewCard,
         );
       });
@@ -175,9 +179,17 @@ class _CustomAlertDialogState<CustomAlertDialog> extends State
         _cardViewState =
             OTPWidget(_cardResponse.message, _controller, _confirmOtp);
       });
+    else if (_cardMode == CardMode.Successful) {
+      setState(() {
+        _cardViewState = SuccessfulWidget(
+          amount: _amount,
+        );
+      });
+    }
   }
 
   _tryNewCard() {
+    _controller.text = "";
     setState(() {
       _cardMode = CardMode.Card;
     });
@@ -204,6 +216,7 @@ class _CustomAlertDialogState<CustomAlertDialog> extends State
       _cardResponse = _cardService.processOtherCards(serviceResponse[1]);
       _cardResponse.error
           ? setState(() {
+              cardMessage = _cardResponse.message;
               _cardMode = CardMode.Error;
               changeView();
             })
@@ -221,12 +234,40 @@ class _CustomAlertDialogState<CustomAlertDialog> extends State
     }
   }
 
-  _confirmOtp() {
+  void _confirmOtp() async {
     OTPModel otpModel = OTPModel();
-    otpModel.paymentCard = _paymentCard;
-    otpModel.otp = _controller.text;
-    CardService.confirmOtp(otpModel);
-//    _response = CheckoutResponse(message: "Success");
+    otpModel
+      ..otp = _controller.text
+      ..paymentCard = _paymentCard
+      ..initializationResponse = _initializationResponse
+      ..cardResponse = _cardResponse;
+
+
+    OTPResponse otpResponse = await CardService.confirmOtp(otpModel);
+    if (otpResponse.error == true) {
+      setState(() {
+        cardMessage = otpResponse.message;
+        _cardMode = CardMode.Error;
+      });
+      changeView();
+    } else {
+      setState(() {
+        _amount = otpResponse.amount;
+        _cardMode = CardMode.Successful;
+      });
+      changeView();
+    }
+    _response = CheckoutResponse(
+      message: otpResponse.message,
+      tokenExpiryDate: otpResponse.message,
+      token: otpResponse.token,
+      transactionRef: otpResponse.transactionRef,
+      transactionIdentifier: otpResponse.transactionIdentifier,
+      cardType: otpResponse.cardType,
+      panLast4Digits: otpResponse.panLast4Digits,
+      amount: otpResponse.amount,
+      status: true
+    );
   }
 
   @override
