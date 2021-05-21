@@ -21,6 +21,7 @@ class FailureWidget extends StatelessWidget {
         ),
         Text(
           message,
+          maxLines: 2,
         ),
         SizedBox(
           height: 10,

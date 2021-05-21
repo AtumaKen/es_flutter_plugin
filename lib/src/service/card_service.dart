@@ -40,50 +40,55 @@ class CardService {
     print(
         num.tryParse(paymentCard.pin == null ? "emppty pin" : paymentCard.pin));
     print(paymentCard.email);
-
-    final response =
-    await http.post("https://easyswitchgroup.com/appApi/appSdkLink.php",
-        body: jsonEncode({
-          "cardNo": paymentCard.number,
-          "expiryYear": paymentCard.year,
-          "expiryMonth": paymentCard.month,
-          "ccvn": paymentCard.cvv,
-          "cardPin":
-          paymentCard.pin == null ? "" : num.tryParse(paymentCard.pin),
-          "clientEmailPO": paymentCard.email,
-          "amountPO": paymentCard.amount
-        }));
-    final responseData = jsonDecode(response.body) as Map<dynamic, dynamic>;
-    print(responseData);
-    final switchData = responseData["switchData"] as Map<dynamic, dynamic>;
-    switchData["status"] = responseData["status"];
-    if (switchData["responseCode"] as String == "S0") {
-      return [true, switchData];
+    try {
+      final response =
+          await http.post("https://easyswitchgroup.com/appApi/appSdkLink.php",
+              body: jsonEncode({
+                "cardNo": paymentCard.number,
+                "expiryYear": paymentCard.year,
+                "expiryMonth": paymentCard.month,
+                "ccvn": paymentCard.cvv,
+                "cardPin": paymentCard.pin == null
+                    ? ""
+                    : num.tryParse(paymentCard.pin),
+                "clientEmailPO": paymentCard.email,
+                "amountPO": paymentCard.amount
+              }));
+      // print(jsonDecode(response.body)) as String;
+      final responseData = jsonDecode(response.body) as Map<dynamic, dynamic>;
+      print(responseData);
+      final switchData = responseData["switchData"] as Map<dynamic, dynamic>;
+      switchData["status"] = responseData["status"];
+      if (switchData["responseCode"] as String == "S0") {
+        return [true, switchData];
+      }
+      return [false, switchData];
+    } catch (e) {
+      print(e.toString());
+      return [0];
     }
-    return [false, switchData];
   }
 
   static Future<OTPResponse> confirmOtp(OTPModel otpModel) async {
-//   static Future<void> confirmOtp(OTPModel otpModel) async {
     print(otpModel.paymentCard.cvv);
     try {
       final response =
-      await http.post("https://easyswitchgroup.com/appApi/confirmOtp.php",
-          body: jsonEncode({
-            "cardNo": otpModel.paymentCard.number,
-            "expiryYear": otpModel.paymentCard.year,
-            "expiryMonth": otpModel.paymentCard.month,
-            "ccvnx": otpModel.paymentCard.cvv,
-            "cardPin": otpModel.paymentCard.pin.isEmpty
-                ? ""
-                : num.tryParse(otpModel.paymentCard.pin),
-            "clientEmailPO": otpModel.paymentCard.email,
-            "otp": otpModel.otp,
-            "paymentId": otpModel.cardResponse.paymentId,
-            "amount" : otpModel.paymentCard.amount,
-            "transactionRef": otpModel.cardResponse.transactionRef,
-            "merchId" : otpModel.initializationResponse.merchantId
-          }));
+          await http.post("https://easyswitchgroup.com/appApi/confirmOtp.php",
+              body: jsonEncode({
+                "cardNo": otpModel.paymentCard.number,
+                "expiryYear": otpModel.paymentCard.year,
+                "expiryMonth": otpModel.paymentCard.month,
+                "ccvnx": otpModel.paymentCard.cvv,
+                "cardPin": otpModel.paymentCard.pin.isEmpty
+                    ? ""
+                    : num.tryParse(otpModel.paymentCard.pin),
+                "clientEmailPO": otpModel.paymentCard.email,
+                "otp": otpModel.otp,
+                "paymentId": otpModel.cardResponse.paymentId,
+                "amount": otpModel.paymentCard.amount,
+                "transactionRef": otpModel.cardResponse.transactionRef,
+                "merchId": otpModel.initializationResponse.merchantId
+              }));
       print(jsonDecode(response.body));
       final responseData = jsonDecode(response.body) as Map<dynamic, dynamic>;
       if (responseData.containsKey("errors")) {
@@ -114,16 +119,17 @@ class CardService {
       {String merchantKey, String amount, String email}) async {
     try {
       final response =
-      await http.post("https://easyswitchgroup.com/appApi/index.php",
-          body: jsonEncode({
-            "Authorization": merchantKey,
-            "amount": amount,
-            "clientEmail": email,
-          }));
+          await http.post("https://easyswitchgroup.com/appApi/index.php",
+              body: jsonEncode({
+                "Authorization": merchantKey,
+                "amount": amount,
+                "clientEmail": email,
+              }));
       final res = jsonDecode(response.body) as Map<String, dynamic>;
+      print(res);
       if (res["status"] == 200)
         return InitializationResponse(
-          //todo: add amount from server
+            //todo: add amount from server
             merchantId: res["merchantID"],
             logoUrl: res["merchantLogoURL"]);
       else

@@ -5,6 +5,8 @@ class PaymentCard {
   String year;
   String cvv;
   String amount;
+
+  ///This is the email address the receipt will be sent to.
   String email;
 
   PaymentCard(

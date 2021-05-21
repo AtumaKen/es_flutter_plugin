@@ -78,15 +78,17 @@ class _MyAppState extends State<MyApp> {
                 MaterialButton(
                   onPressed: () async {
                     Charge charge = setUpCharge();
-                    final response = await EasySwitchPlugin(
+                    CheckoutResponse response = await EasySwitchPlugin(
                       context: context,
                       charge: charge,
                       merchantKey:
+                          //todo: remove test key before publishing
                           "pk_test_lPexiZEbPVLHpowBvz/kSGR7StYAxVE8QBJCqFtg3CC6cmA1rIMBGlTjpd8IG2Kn",
                     ).validate();
-                    print(response.amount);
+                    print(response.toString());
                   },
                   child: Text("Pay"),
+                  //580902
                 )
               ],
             ),

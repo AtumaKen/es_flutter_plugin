@@ -190,6 +190,7 @@ class _CustomAlertDialogState<CustomAlertDialog> extends State
 
   _tryNewCard() {
     _controller.text = "";
+    _paymentCard = PaymentCard();
     setState(() {
       _cardMode = CardMode.Card;
     });
@@ -224,6 +225,12 @@ class _CustomAlertDialogState<CustomAlertDialog> extends State
               _cardMode = CardMode.OTP;
               changeView();
             });
+    } else if (serviceResponse[0] == 0) {
+      setState(() {
+        cardMessage = Strings.errorMessage;
+        _cardMode = CardMode.Error;
+        changeView();
+      });
     } else {
       VisaResponseModel visaResponseModel =
           _cardService.processVisaCards(serviceResponse[1]);
@@ -242,7 +249,6 @@ class _CustomAlertDialogState<CustomAlertDialog> extends State
       ..initializationResponse = _initializationResponse
       ..cardResponse = _cardResponse;
 
-
     OTPResponse otpResponse = await CardService.confirmOtp(otpModel);
     if (otpResponse.error == true) {
       setState(() {
@@ -258,16 +264,15 @@ class _CustomAlertDialogState<CustomAlertDialog> extends State
       changeView();
     }
     _response = CheckoutResponse(
-      message: otpResponse.message,
-      tokenExpiryDate: otpResponse.message,
-      token: otpResponse.token,
-      transactionRef: otpResponse.transactionRef,
-      transactionIdentifier: otpResponse.transactionIdentifier,
-      cardType: otpResponse.cardType,
-      panLast4Digits: otpResponse.panLast4Digits,
-      amount: otpResponse.amount,
-      status: true
-    );
+        message: otpResponse.message,
+        tokenExpiryDate: otpResponse.message,
+        token: otpResponse.token,
+        transactionRef: otpResponse.transactionRef,
+        transactionIdentifier: otpResponse.transactionIdentifier,
+        cardType: otpResponse.cardType,
+        panLast4Digits: otpResponse.panLast4Digits,
+        amount: otpResponse.amount,
+        status: true);
   }
 
   @override

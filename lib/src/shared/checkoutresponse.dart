@@ -19,4 +19,12 @@ class CheckoutResponse {
       this.panLast4Digits = '',
       this.cardType = '',
       this.amount = ''});
+
+  @override
+  String toString() {
+    return "message: ${message.toString()} status: ${status.toString()} transactionRef: ${transactionRef.toString()}"
+        " transactionIdentifier: ${transactionIdentifier.toString()} tokenExpiry: ${tokenExpiryDate.toString()}"
+        " token: ${token.toString()} panLast4Digits: ${panLast4Digits.toString()} cardType: ${cardType.toString()} "
+        "amount: ${amount.toString()}";
+  }
 }

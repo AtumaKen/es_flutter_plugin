@@ -16,16 +16,20 @@ class EasySwitchPlugin {
   String _merchantKey;
   BuildContext _context;
 
-  EasySwitchPlugin(
-      {@required Charge charge,
-      @required BuildContext context,
-      @required merchantKey})
+  EasySwitchPlugin({@required Charge charge,
+    @required BuildContext context,
+    @required merchantKey})
       : _charge = charge,
         _context = context,
         _merchantKey = merchantKey;
 
-  Future<CheckoutResponse> validate() async{
-      num.parse(_charge.amount);
+  Widget _cancelButton() {
+    FlatButton(
+        onPressed: () => Navigator.of(_context).pop(), child: Text("Cancel"));
+  }
+
+  Future<CheckoutResponse> validate() async {
+    num.parse(_charge.amount);
     if (_context == null) {
       throw NoContextException("Context has to be provided");
     } else if (_charge == null ||
@@ -43,15 +47,31 @@ class EasySwitchPlugin {
   Future<CheckoutResponse> _initializeSdk() async {
     InitializationResponse response = InitializationResponse();
     try {
-      _progressDialog();
+      _progressDialog(
+        "Initializing...",
+        Platform.isIOS
+            ? CupertinoActivityIndicator()
+            : CircularProgressIndicator(
+          valueColor: AlwaysStoppedAnimation<Color>(Colors.green),
+        ),
+      );
       response = await CardService.initializeSdk(
           merchantKey: _merchantKey,
           amount: _charge.amount,
           email: _charge.email);
       Navigator.of(_context).pop();
-      print(response.merchantId);
     } on SocketException {
-      throw SocketException("There was a network error during initialization");
+      Navigator.of(_context).pop();
+      _progressDialog(
+          "There was a network error during initialization", FlatButton(
+          onPressed: () => Navigator.of(_context).pop(), child: Text("Cancel"))
+      );
+    } catch (e) {
+      Navigator.of(_context).pop();
+      _progressDialog(
+          "There was a problem during initialization", FlatButton(
+          onPressed: () => Navigator.of(_context).pop(), child: Text("Cancel"))
+      );
     }
     if (response == null)
       throw AuthenticationException("Wrong Merchant key or Amount too large");
@@ -65,7 +85,8 @@ class EasySwitchPlugin {
     response = await showDialog(
         barrierDismissible: false,
         context: _context,
-        builder: (ctx) => CustomAlertDialog(
+        builder: (ctx) =>
+            CustomAlertDialog(
               charge: _charge,
               initializationResponse: initializationResponse,
             ));
@@ -74,19 +95,13 @@ class EasySwitchPlugin {
     return response;
   }
 
-  void _progressDialog() {
+  void _progressDialog(String text, Widget widget) {
     AlertDialog alert = AlertDialog(
       elevation: 0,
       content: Row(
         children: [
-          Platform.isIOS
-              ? CupertinoActivityIndicator()
-              : CircularProgressIndicator(
-                  valueColor: AlwaysStoppedAnimation<Color>(Colors.green),
-                ),
-          Container(
-              margin: EdgeInsets.only(left: 15),
-              child: Text("Initializing...")),
+          widget,
+          Container(margin: EdgeInsets.only(left: 15), child: Text(text)),
         ],
       ),
     );
