@@ -54,9 +54,8 @@ class CardService {
                 "clientEmailPO": paymentCard.email,
                 "amountPO": paymentCard.amount
               }));
-      // print(jsonDecode(response.body)) as String;
       final responseData = jsonDecode(response.body) as Map<dynamic, dynamic>;
-      print(responseData);
+      print(responseData["switchData"].runtimeType);
       final switchData = responseData["switchData"] as Map<dynamic, dynamic>;
       switchData["status"] = responseData["status"];
       if (switchData["responseCode"] as String == "S0") {
