@@ -22,11 +22,16 @@ class _VisaWebViewState extends State<VisaWebView> {
 
   @override
   Widget build(BuildContext context) {
+    print("https://easyswitchgroup.com/easyswitchpay/secureRedirect.php?ACSUrl="
+        "${widget.visaResponseModel.acsUrl}&TermUrl=${widget.visaResponseModel.termUrl}&MD="
+        "${widget.visaResponseModel.mD}&PaReq=${widget.visaResponseModel.paReq}");
     return WebView(
+      javascriptMode: JavascriptMode.unrestricted,
+      debuggingEnabled: true,
       initialUrl:
           "https://easyswitchgroup.com/easyswitchpay/secureRedirect.php?ACSUrl="
-          "${widget.visaResponseModel.acsUrl}&TermUrl=${widget.visaResponseModel.termUrl}+&MD="
-          "${widget.visaResponseModel.mD}&PaReq=${widget.visaResponseModel.paReq}",
+          "'${widget.visaResponseModel.acsUrl}'&TermUrl='${widget.visaResponseModel.termUrl}'&MD="
+          "${widget.visaResponseModel.mD}'&PaReq='${widget.visaResponseModel.paReq}'",
     );
   }
 }
