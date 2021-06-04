@@ -50,14 +50,15 @@ class _CustomAlertDialogState<CustomAlertDialog> extends State
   Widget _cardViewState;
   CardService _cardService = CardService();
   String cardMessage;
-  String _amount;
+  String _amount = " ";
 
   _CustomAlertDialogState(this._charge, this._initializationResponse);
 
   @override
   void initState() {
-//    _cardViewState = CardForm(_formKey, _paymentCard, _onSaved, _getCardTypeFromNumber);
     _cardViewState = CardForm(_formKey, _paymentCard, _onSaved);
+    _amount = _initializationResponse.amount.toString();
+    print("This is the initialization response ampunt " + _initializationResponse.actualAmout.toString());
     super.initState();
   }
 
@@ -119,7 +120,7 @@ class _CustomAlertDialogState<CustomAlertDialog> extends State
                                       ),
                                       Column(
                                         children: [
-                                          Text("Pay NGN ${_charge.amount}"),
+                                          Text("Pay NGN $_amount"),
                                           SizedBox(
                                             height: 5,
                                           ),
@@ -210,9 +211,9 @@ class _CustomAlertDialogState<CustomAlertDialog> extends State
     FocusScope.of(context).unfocus();
     _paymentCard
       ..email = _charge.email
-      ..amount = _charge.amount;
+      ..amount = _initializationResponse.payInterswitch;
     List<dynamic> serviceResponse =
-        await _cardService.submitCardDetails(_paymentCard);
+        await _cardService.submitCardDetails(_paymentCard, _initializationResponse.actualAmout, _initializationResponse.payInterswitch);
     if (serviceResponse[0] == false) {
       _cardResponse = _cardService.processOtherCards(serviceResponse[1]);
       _cardResponse.error
@@ -258,7 +259,6 @@ class _CustomAlertDialogState<CustomAlertDialog> extends State
       changeView();
     } else {
       setState(() {
-        _amount = otpResponse.amount;
         _cardMode = CardMode.Successful;
       });
       changeView();

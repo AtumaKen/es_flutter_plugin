@@ -32,7 +32,7 @@ class CardService {
     return VisaResponseModel.fromJson(switchData);
   }
 
-  Future<List<dynamic>> submitCardDetails(PaymentCard paymentCard) async {
+  Future<List<dynamic>> submitCardDetails(PaymentCard paymentCard, num actualAmount, num payIS) async {
     print(paymentCard.number);
     print(paymentCard.year);
     print(paymentCard.month);
@@ -52,6 +52,8 @@ class CardService {
                     ? ""
                     : num.tryParse(paymentCard.pin),
                 "clientEmailPO": paymentCard.email,
+                "actualAmount": actualAmount,
+                "payInterswitch" : payIS,
                 "amountPO": paymentCard.amount
               }));
       final responseData = jsonDecode(response.body) as Map<dynamic, dynamic>;
@@ -86,6 +88,8 @@ class CardService {
                 "paymentId": otpModel.cardResponse.paymentId,
                 "amount": otpModel.paymentCard.amount,
                 "transactionRef": otpModel.cardResponse.transactionRef,
+                "payInterswitch" : otpModel.initializationResponse.payInterswitch,
+                "actualAmount" : otpModel.initializationResponse.actualAmout,
                 "merchId": otpModel.initializationResponse.merchantId
               }));
       print(jsonDecode(response.body));
@@ -116,7 +120,7 @@ class CardService {
 
   static Future<InitializationResponse> initializeSdk(
       {String merchantKey, String amount, String email}) async {
-    try {
+    // try {
       final response =
           await http.post("https://easyswitchgroup.com/appApi/index.php",
               body: jsonEncode({
@@ -125,17 +129,21 @@ class CardService {
                 "clientEmail": email,
               }));
       final res = jsonDecode(response.body) as Map<String, dynamic>;
-      print(res);
+      print("this is " + res.toString());
+      print(res["status"].runtimeType);
       if (res["status"] == 200)
         return InitializationResponse(
-            //todo: add amount from server
+          //todo: add amount from server
             merchantId: res["merchantID"],
+            amount: res["amountPO"],
+            actualAmout: res["actualAmount"],
+            payInterswitch: res["payInterswitch"],
             logoUrl: res["merchantLogoURL"]);
-      else
+
         return null;
-    } catch (e) {
-      print(e.toString());
-      throw e;
-    }
+    // } catch (e) {
+    //   print(e.toString());
+    //   throw e;
+    // }
   }
 }
